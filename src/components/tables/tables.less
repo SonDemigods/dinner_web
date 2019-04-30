@@ -1,0 +1,80 @@
+/*
+ *@description: 基础表格样式
+ *@author: 张航 
+ *@date: 2019-02-11 09:37:50
+ *@version V1.0.0 
+*/
+.tool-box {
+  margin-bottom: 10px;
+
+  &::after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+
+  .tool-slot {
+    padding-right: 30px;
+
+    &::after {
+      content: "";
+      display: block;
+      clear: both;
+    }
+		
+		&.no {
+		  padding-right: 0;
+		}
+		
+    .ivu-btn {
+      margin-right: 6px;
+    }
+		
+		.ivu-dropdown {
+      margin-left: 6px;
+
+      button {
+        margin-left: 0 !important;
+      }
+    }
+  }
+
+  .page-slot {
+    &::after {
+      content: "";
+      display: block;
+      clear: both;
+    }
+  }
+
+  .ivu-poptip {
+    .ivu-poptip-rel {
+      .ivu-btn {
+        margin-right: 0;
+        padding: 5px 4px 6px;
+      }
+    }
+
+    .ivu-poptip-popper {
+      z-index: 9999;
+
+      .ivu-poptip-body {
+        padding-right: 6px;
+
+        .ivu-poptip-body-content-inner {
+          padding-right: 10px;
+          max-height: 400px;
+          overflow-y: auto;
+        }
+      }
+    }
+  }
+}
+
+.colList {
+  margin: 1px;
+
+  .ivu-checkbox-wrapper {
+    display: block;
+  }
+}

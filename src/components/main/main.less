@@ -1,0 +1,125 @@
+.main {
+  .logo-con {
+    height: 64px;
+    padding: 10px;
+
+    img {
+      height: 44px;
+      width: auto;
+      display: block;
+      margin: 0 auto;
+    }
+  }
+
+  .header-con {
+    background: #fff;
+    padding: 0 20px;
+    width: 100%;
+  }
+
+  .main-layout-con {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .main-content-con {
+    height: ~"calc(100% - 60px)";
+    overflow: hidden;
+  }
+
+  .tag-nav-wrapper {
+    padding: 0;
+    height: 40px;
+    background: #F0F0F0;
+  }
+
+  .content-wrapper {
+    padding: 10px;
+    height: ~"calc(100% - 70px)";
+    overflow: auto;
+  }
+
+  .left-sider {
+    .ivu-layout-sider-children {
+      overflow-y: scroll;
+      margin-right: -18px;
+    }
+  }
+
+  .ivu-page {
+    text-align: right;
+    margin-top: 10px;
+  }
+}
+
+.ivu-menu-item>i {
+  margin-right: 12px !important;
+}
+
+.ivu-menu-submenu>.ivu-menu>.ivu-menu-item>i {
+  margin-right: 8px !important;
+}
+
+.collased-menu-dropdown {
+  width: 100%;
+  margin: 0;
+  line-height: normal;
+  padding: 7px 0 6px 16px;
+  clear: both;
+  font-size: 12px !important;
+  white-space: nowrap;
+  list-style: none;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+
+  &:hover {
+    background: rgba(100, 100, 100, 0.1);
+  }
+
+  & * {
+    color: #515a6e;
+  }
+
+  .ivu-menu-item>i {
+    margin-right: 12px !important;
+  }
+
+  .ivu-menu-submenu>.ivu-menu>.ivu-menu-item>i {
+    margin-right: 8px !important;
+  }
+}
+
+.ivu-select-dropdown.ivu-dropdown-transfer {
+  max-height: 400px;
+}
+
+// 表格状态样式
+.tableStatusBorder {
+  line-height: 24px;
+  display: block;
+  margin: 0 auto;
+  width: 60px;
+  text-align: center;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 2px;
+  color: #fff;
+}
+
+/*滚动条整体样式*/
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  // box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  background: #dddee1;
+}
+
+::-webkit-scrollbar-track {
+  // box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  background: #f8f8f9;
+}
