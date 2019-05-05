@@ -12,6 +12,12 @@
                 @on-delete="deleteForm"
                 @on-leave="editLeaveForm">
       <div slot="tool">
+        <DatePicker v-model="searchDate"
+                    type="date"
+                    placeholder="请选择日期"
+                    style="width: 200px"
+                    clearable
+                    @on-change="searchTable"></DatePicker>
         <Button v-if="access_delete"
                 type="error"
                 icon='md-trash'
@@ -28,6 +34,7 @@
       <div slot="page">
         <Page :total="total"
               :page-size="pageSize"
+              :current="current"
               show-elevator
               show-total
               show-sizer
@@ -77,11 +84,12 @@ export default {
   props: {},
   data () {
     return {
+      searchDate: '',
       tableHeight: window.innerHeight - 250,
       columns: columnsList,
       tableData: [],
       total: 0,
-      pageSize: 10,
+      pageSize: 20,
       current: 1,
       workFormShow: false,
       workFormId: 0,
@@ -206,15 +214,16 @@ export default {
       this.reloadTable()
     },
     // 搜索相关方法
-    searchTable () {
-      this.searchKey = this.searchKeyNow
+    searchTable (date) {
+      this.searchDate = date
       this.current = 1
       this.reloadTable()
     },
     reloadTable () {
       let data = {
         pageSize: this.pageSize,
-        current: this.current
+        current: this.current,
+        date: this.searchDate
       }
       this.$api('work/getWorkPage', data).then(res => {
         this.tableData = res.row
