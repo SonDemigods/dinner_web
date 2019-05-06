@@ -26,6 +26,7 @@
       <div slot="page">
         <Page :total="total"
               :page-size="pageSize"
+              :current="current"
               show-elevator
               show-total
               show-sizer
@@ -58,7 +59,7 @@ export default {
       columns: columnsList,
       tableData: [],
       total: 0,
-      pageSize: 10,
+      pageSize: 20,
       current: 1,
       personFormShow: false,
       personFormId: 0,

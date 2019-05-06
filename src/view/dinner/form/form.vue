@@ -37,7 +37,8 @@
         <Select v-model="formData.fid"
                 placeholder="请选择菜品"
                 filterable
-                clearable>
+                clearable
+                @on-change="changeFid">
           <Option v-for="item in foodList"
                   :value="item.id"
                   :key="item.id">{{ item.name }}</Option>
@@ -140,6 +141,11 @@ export default {
         }
         let userId = JSON.parse(localStorage.getItem('userid'))
         this.formData.pid = userId
+      }
+    },
+    changeFid (val) {
+      if (val === 2) {
+        this.formData.fid = null
       }
     },
     ok () {
