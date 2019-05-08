@@ -18,6 +18,20 @@
                     style="width: 200px"
                     clearable
                     @on-change="searchTable"></DatePicker>
+
+        <Select v-if="access_delete"
+                v-model="personListModel"
+                @on-change="personOnChangeHandle"
+                style="width:200px; margin-left:10px;">
+          <Option v-for="item in personList"
+                  :value="item.id"
+                  :key="item.id">{{ item.name }}</Option>
+        </Select>
+
+        <Button style="margin-left:10px;"
+                @click="onlyMeClick">只看自己
+        </Button>
+
         <Button v-if="access_delete"
                 type="error"
                 icon='md-trash'
@@ -84,6 +98,8 @@ export default {
   props: {},
   data () {
     return {
+      personListModel: '',
+      personList: [],
       searchDate: '',
       tableHeight: window.innerHeight - 250,
       columns: columnsList,
@@ -121,6 +137,29 @@ export default {
     }
   },
   methods: {
+    onlyMeClick () {
+      let userId = localStorage.getItem('userid')
+      this.getWorkListByNameId(userId)
+    },
+    getWorkListByNameId (nameId) {
+      this.$api('work/getWorkListByNameId', { nameId: nameId }).then(res => {
+        console.info('res', res)
+        this.tableData = res
+      })
+    },
+    personOnChangeHandle (item) {
+      console.info('personOnChangeHandle', item)
+      this.getWorkListByNameId(item)
+    },
+    init () {
+      this.getPersonList()
+    },
+    getPersonList () {
+      this.$api('person/getPersonList').then(res => {
+        console.info('res', res)
+        this.personList = res
+      })
+    },
     addForm () {
       this.workFormTitle = '新增'
       this.workFormId = 0
@@ -234,7 +273,9 @@ export default {
   created () {
     this.reloadTable()
   },
-  mounted () { }
+  mounted () {
+    this.init()
+  }
 }
 </script>
 <style lang="less" scoped>
