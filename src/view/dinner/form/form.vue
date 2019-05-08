@@ -62,7 +62,6 @@
     </Form>
   </Modal>
 </template>
-
 <script>
 import { workType } from '@/libs/selectList'
 export default {
