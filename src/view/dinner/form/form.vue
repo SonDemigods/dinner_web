@@ -121,9 +121,21 @@ export default {
   computed: {
   },
   methods: {
+    getToday () {
+      let year = new Date().getFullYear()
+      let month = new Date().getMonth() + 1
+      let day = new Date().getDate()
+      month = month < 10 ? '0' + month : month
+      day = day < 10 ? '0' + day : day
+      let today = year + '-' + month + '-' + day
+      return today
+    },
+    onchange111 () {
+      console.info('formData.date', this.formData.date)
+    },
     init () {
       // console.info('(new Date()).toLocaleDateString()', (new Date()).toLocaleDateString().replace(/\//g, '-').toString())
-      // console.info('formData.date', this.formData.date)
+      console.info('formData.date', this.formData.date)
     },
     formInit () {
       this.$api('food/getFoodList').then(res => {
@@ -142,7 +154,8 @@ export default {
           fid: null,
           pid: null,
           type: null,
-          date: (new Date()).toLocaleDateString().replace(/\//g, '-'),
+          // date: (new Date()).toLocaleDateString().replace(/\//g, '-'),
+          date: this.getToday(),
           remark: ''
         }
         let userId = JSON.parse(localStorage.getItem('userid'))
