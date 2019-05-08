@@ -46,8 +46,9 @@
       </FormItem>
       <FormItem label="加班日期"
                 prop="date">
-        <DatePicker v-model="formData.date"
+        <DatePicker :value="formData.date"
                     type="date"
+                    format="yyyy-MM-dd"
                     placeholder="请选择日期"
                     @on-change="_ => formData.date = _"
                     style="width: 100%;"></DatePicker>
@@ -92,6 +93,7 @@ export default {
         pid: null,
         type: null,
         date: null,
+        // date: (new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate()) + 'look',
         remark: ''
       },
       personList: [],
@@ -120,6 +122,10 @@ export default {
   computed: {
   },
   methods: {
+    init () {
+      // console.info('(new Date()).toLocaleDateString()', (new Date()).toLocaleDateString().replace(/\//g, '-').toString())
+      // console.info('formData.date', this.formData.date)
+    },
     formInit () {
       this.$api('food/getFoodList').then(res => {
         this.foodList = res
@@ -137,6 +143,7 @@ export default {
           fid: null,
           pid: null,
           type: null,
+          date: (new Date()).toLocaleDateString().replace(/\//g, '-'),
           remark: ''
         }
         let userId = JSON.parse(localStorage.getItem('userid'))
@@ -149,6 +156,7 @@ export default {
       }
     },
     ok () {
+      console.info('date', this.formData.date, this.formData, this)
       this.loading = false
       this.$refs['workFormData'].validate((valid) => {
         if (valid) {
@@ -176,7 +184,7 @@ export default {
     }
   },
   created () { },
-  mounted () { }
+  mounted () { this.init() }
 }
 </script>
 <style lang="less" scoped>
