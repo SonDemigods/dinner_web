@@ -98,6 +98,7 @@ export default {
   props: {},
   data () {
     return {
+      pid: '',
       personListModel: '',
       personList: [],
       searchDate: '',
@@ -138,8 +139,12 @@ export default {
   },
   methods: {
     onlyMeClick () {
-      let userId = localStorage.getItem('userid')
-      this.getWorkListByNameId(userId)
+      this.pid = localStorage.getItem('userid')
+      this.current = 1
+      this.searchDate = ''
+      console.info(`pid ${this.pid}`)
+      this.reloadTable()
+      // this.getWorkListByNameId(userId)
     },
     getWorkListByNameId (nameId) {
       this.$api('work/getWorkListByNameId', { nameId: nameId }).then(res => {
@@ -255,6 +260,7 @@ export default {
     // 搜索相关方法
     searchTable (date) {
       this.searchDate = date
+      this.pid = ''
       this.current = 1
       this.reloadTable()
     },
@@ -262,9 +268,11 @@ export default {
       let data = {
         pageSize: this.pageSize,
         current: this.current,
-        date: this.searchDate
+        date: this.searchDate,
+        pid: this.pid
       }
       this.$api('work/getWorkPage', data).then(res => {
+        console.info('getWorkPage res', res)
         this.tableData = res.row
         this.total = res.total
       })
