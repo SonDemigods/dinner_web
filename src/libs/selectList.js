@@ -13,12 +13,9 @@ export const boolean = [{
 }]
 
 export const workType = [{
-  label: '不加班',
-  value: 0
-}, {
   label: '集体订餐',
   value: 1
 }, {
-  label: '自己订餐',
+  label: '个人订餐',
   value: 2
 }]
