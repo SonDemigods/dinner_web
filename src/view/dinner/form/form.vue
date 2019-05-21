@@ -25,7 +25,8 @@
         <Select v-model="formData.type"
                 placeholder="请选择类型"
                 filterable
-                clearable>
+                clearable
+                @on-change="changeType">
           <Option v-for="item in workTypeList"
                   :value="item.value"
                   :key="item.value">{{ item.label }}</Option>
@@ -43,6 +44,14 @@
                   :value="item.id"
                   :key="item.id">{{ item.name }}</Option>
         </Select>
+      </FormItem>
+      <FormItem label="菜品备注"
+                v-if="formData.type === 1">
+        <Input v-model="formData.fremark"
+               readonly
+               type="textarea"
+               :rows="4"
+               placeholder="请填写备注"></Input>
       </FormItem>
       <FormItem label="加班日期"
                 prop="date">
@@ -89,6 +98,7 @@ export default {
       formData: {
         id: null,
         fid: null,
+        fremark: '',
         pid: null,
         type: null,
         date: null,
@@ -162,10 +172,17 @@ export default {
         this.formData.pid = userId
       }
     },
-    changeFid (val) {
+    changeType (val) {
       if (val === 2) {
         this.formData.fid = null
       }
+    },
+    changeFid (val) {
+      this.foodList.map(item => {
+        if (item.id === val) {
+          this.formData.fremark = item.remark
+        }
+      })
     },
     ok () {
       console.info('date', this.formData.date, this.formData, this)
