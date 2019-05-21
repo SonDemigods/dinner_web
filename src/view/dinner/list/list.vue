@@ -31,6 +31,10 @@
         <Button style="margin-left:10px;"
                 @click="onlyMeClick">只看自己
         </Button>
+        <Button v-if="access_delete"
+                type="warning"
+                icon="md-download"
+                @click="showExportModal">导出excel</Button>
 
         <Button v-if="access_delete"
                 type="error"
@@ -70,7 +74,7 @@
            @on-cancel="cancelLeave">
       <Form ref="leaveFormData"
             :model="leaveForm"
-            :rules="leaveformValidate"
+            :rules="leaveFormValidate"
             :label-width="80">
         <FormItem label="打卡时间"
                   prop="leave">
@@ -79,6 +83,45 @@
                       placeholder="请选择时间"
                       style="width: 100%;"></TimePicker>
         </FormItem>
+        <FormItem label="发票类型"
+                  prop="invoiceType">
+          <Select v-model="leaveForm.invoiceType"
+                  placeholder="请选择类型"
+                  filterable
+                  clearable>
+            <Option v-for="item in invoiceTypeList"
+                    :value="item.value"
+                    :key="item.value">{{ item.label }}</Option>
+          </Select>
+        </FormItem>
+      </Form>
+    </Modal>
+    <Modal v-model="exportModal"
+           title="导出excel"
+           :closable="false"
+           :loading="loading"
+           @on-ok="okExport"
+           @on-cancel="cancelExport">
+      <Form ref="exportFormData"
+            :model="exportForm"
+            :rules="exportFormValidate"
+            :label-width="80">
+        <FormItem label="开始日期"
+                  prop="start">
+          <DatePicker v-model="exportForm.start"
+                      type="date"
+                      placeholder="请选择日期"
+                      style="width: 100%"
+                      @on-change="_ => exportForm.start = _"></DatePicker>
+        </FormItem>
+        <FormItem label="结束日期"
+                  prop="end">
+          <DatePicker v-model="exportForm.end"
+                      type="date"
+                      placeholder="请选择日期"
+                      style="width: 100%"
+                      @on-change="_ => exportForm.end = _"></DatePicker>
+        </FormItem>
       </Form>
     </Modal>
   </div>
@@ -86,9 +129,11 @@
 
 <script>
 import { hasOneOf } from '@/libs/tools'
+import excel from '@/libs/excel'
 import baseTable from '_c/tables'
 import columnsList from './columns'
 import workForm from '../form/form'
+import { invoiceType } from '@/libs/selectList'
 export default {
   name: 'workList',
   components: {
@@ -111,14 +156,32 @@ export default {
       workFormShow: false,
       workFormId: 0,
       workFormTitle: '',
-      leaveModal: false,
       loading: true,
+      leaveModal: false,
+      invoiceTypeList: invoiceType,
       leaveForm: {
         id: null,
-        leave: new Date()
+        leave: new Date(),
+        invoiceType: null
       },
-      leaveformValidate: {
+      leaveFormValidate: {
         leave: [
+          { required: true, message: '时间不能为空', trigger: 'change' }
+        ],
+        invoiceType: [
+          { required: true, type: 'number', message: '类型不能为空', trigger: 'change' }
+        ]
+      },
+      exportModal: false,
+      exportForm: {
+        start: '',
+        end: ''
+      },
+      exportFormValidate: {
+        start: [
+          { required: true, message: '时间不能为空', trigger: 'change' }
+        ],
+        end: [
           { required: true, message: '时间不能为空', trigger: 'change' }
         ]
       }
@@ -138,17 +201,60 @@ export default {
     }
   },
   methods: {
+    // 只看自己
     onlyMeClick () {
       this.pid = localStorage.getItem('userid')
       this.current = 1
       this.searchDate = ''
-      console.info(`pid ${this.pid}`)
       this.reloadTable()
       // this.getWorkListByNameId(userId)
     },
+    // 导出excel
+    showExportModal () {
+      this.exportModal = true
+    },
+    okExport () {
+      this.loading = false
+      this.$refs['exportFormData'].validate((valid) => {
+        if (valid) {
+          this.$api('work/getWorkList', this.exportForm).then((res) => {
+            if (this.tableData.length) {
+              let data = {}
+              res.map(item => {
+                if (!data[item.date]) {
+                  data[item.date] = []
+                }
+                data[item.date].push(item)
+              })
+              const params = {
+                title: ['日期', '打卡时间', '人员', '发票类型', '用餐类型', '菜品', '备注'],
+                key: ['date', 'leave', 'personName', 'invoiceTypeText', 'typeText', 'foodName', 'remark'],
+                data: data,
+                autoWidth: true,
+                filename: `${this.exportForm.start} 至 ${this.exportForm.end} 加班记录表`
+              }
+              excel.export_work(params)
+              this.exportModal = false
+            } else {
+              this.$nextTick(() => {
+                this.loading = true
+              })
+              this.$Message.info('该时间段数据为空！')
+            }
+          })
+        } else {
+          this.$nextTick(() => {
+            this.loading = true
+          })
+          this.$Message.error('请检查表单!')
+        }
+      })
+    },
+    cancelExport () {
+      this.exportModal = false
+    },
     getWorkListByNameId (nameId) {
       this.$api('work/getWorkListByNameId', { nameId: nameId }).then(res => {
-        console.info('res', res)
         this.tableData = res
       })
     },
@@ -161,7 +267,6 @@ export default {
     },
     getPersonList () {
       this.$api('person/getPersonList').then(res => {
-        console.info('res', res)
         this.personList = res
       })
     },
@@ -192,6 +297,7 @@ export default {
       this.leaveModal = true
       this.leaveForm.id = this.tableData[index].id
       this.leaveForm.leave = this.tableData[index].leave
+      this.leaveForm.invoiceType = this.tableData[index].invoiceType
     },
     okLeave () {
       this.loading = false
@@ -272,7 +378,6 @@ export default {
         pid: this.pid
       }
       this.$api('work/getWorkPage', data).then(res => {
-        console.info('getWorkPage res', res)
         this.tableData = res.row
         this.total = res.total
       })

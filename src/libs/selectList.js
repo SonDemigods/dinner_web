@@ -19,3 +19,14 @@ export const workType = [{
   label: '个人订餐',
   value: 2
 }]
+
+export const invoiceType = [{
+  label: '定额发票',
+  value: 1
+}, {
+  label: '机打发票',
+  value: 2
+}, {
+  label: '电子发票',
+  value: 3
+}]

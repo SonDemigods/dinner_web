@@ -66,6 +66,42 @@ const columnsList = [{
   align: 'center'
 },
 {
+  title: '发票类型',
+  key: 'invoiceType',
+  minWidth: 100,
+  align: 'center',
+  render: (h, params) => {
+    let typeList = {
+      1: h('div', {
+        class: 'tableStatusBorder',
+        style: {
+          backgroundColor: '#2d8cf0',
+          borderColor: '#2d8cf0',
+          marginBottom: '3px'
+        }
+      }, '定额'),
+      2: h('div', {
+        class: 'tableStatusBorder',
+        style: {
+          backgroundColor: '#19be6b',
+          borderColor: '#19be6b',
+          marginBottom: '3px'
+        }
+      }, '机打'),
+      3: h('div', {
+        class: 'tableStatusBorder',
+        style: {
+          backgroundColor: '#ff9900',
+          borderColor: '#ff9900',
+          marginBottom: '3px'
+        }
+      }, '电子')
+    }
+    let dom = typeList[params.row.invoiceType]
+    return h('div', [dom])
+  }
+},
+{
   title: '备注',
   key: 'remark',
   minWidth: 100,
