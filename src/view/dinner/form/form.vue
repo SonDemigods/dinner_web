@@ -140,12 +140,7 @@ export default {
       let today = year + '-' + month + '-' + day
       return today
     },
-    onchange111 () {
-      console.info('formData.date', this.formData.date)
-    },
     init () {
-      // console.info('(new Date()).toLocaleDateString()', (new Date()).toLocaleDateString().replace(/\//g, '-').toString())
-      console.info('formData.date', this.formData.date)
     },
     formInit () {
       this.$api('food/getFoodList').then(res => {
@@ -185,7 +180,6 @@ export default {
       })
     },
     ok () {
-      console.info('date', this.formData.date, this.formData, this)
       this.loading = false
       this.$refs['workFormData'].validate((valid) => {
         if (valid) {

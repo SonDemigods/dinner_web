@@ -106,22 +106,21 @@
             :model="exportForm"
             :rules="exportFormValidate"
             :label-width="80">
-        <FormItem label="开始日期"
+        <FormItem label="时间段"
                   prop="start">
-          <DatePicker v-model="exportForm.start"
-                      type="date"
+          <DatePicker type="daterange"
                       placeholder="请选择日期"
                       style="width: 100%"
-                      @on-change="_ => exportForm.start = _"></DatePicker>
+                      @on-change="_ => { exportForm.start = _[0],exportForm.end = _[1] }"></DatePicker>
         </FormItem>
-        <FormItem label="结束日期"
+        <!-- <FormItem label="结束日期"
                   prop="end">
           <DatePicker v-model="exportForm.end"
                       type="date"
                       placeholder="请选择日期"
                       style="width: 100%"
                       @on-change="_ => exportForm.end = _"></DatePicker>
-        </FormItem>
+        </FormItem> -->
       </Form>
     </Modal>
   </div>
@@ -218,7 +217,7 @@ export default {
       this.$refs['exportFormData'].validate((valid) => {
         if (valid) {
           this.$api('work/getWorkList', this.exportForm).then((res) => {
-            if (this.tableData.length) {
+            if (res.length) {
               let data = {}
               res.map(item => {
                 if (!data[item.date]) {
@@ -259,7 +258,6 @@ export default {
       })
     },
     personOnChangeHandle (item) {
-      console.info('personOnChangeHandle', item)
       this.getWorkListByNameId(item)
     },
     init () {
