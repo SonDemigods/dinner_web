@@ -386,6 +386,9 @@ export default {
   },
   mounted () {
     this.init()
+    window.addEventListener('resize', () => {
+      this.tableHeight = window.innerHeight - 250
+    })
   }
 }
 </script>

@@ -156,7 +156,11 @@ export default {
   created () {
     this.reloadTable()
   },
-  mounted () { }
+  mounted () {
+    window.addEventListener('resize', () => {
+      this.tableHeight = window.innerHeight - 250
+    })
+  }
 }
 </script>
 <style lang="less" scoped>

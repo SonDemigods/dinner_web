@@ -32,7 +32,7 @@ export default {
       state.userId = id
     },
     setUserName (state, name) {
-      localStorage.setItem('userpic', name)
+      localStorage.setItem('userName', name)
       state.userName = name
     },
     setAccess (state, access) {
@@ -67,7 +67,7 @@ export default {
             Message.success(data.msg)
             localStorage.clear()
             commit('setToken', data.data.isAdmin)
-            commit('setAvator', 'https://file.iviewui.com/dist/a0e88e83800f138b94d2414621bd9704.png')
+            commit('setAvator', 'https://avatars2.githubusercontent.com/u/23623726?s=460&v=4')
             commit('setUserName', data.data.name)
             commit('setUserId', data.data.id)
             commit('setToken', data.data.isAdmin)
