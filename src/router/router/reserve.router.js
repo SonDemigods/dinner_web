@@ -1,10 +1,10 @@
 import Main from '@/components/main'
 export default {
-  path: '/dinner',
-  name: 'dinner',
+  path: '/reserve',
+  name: 'reserve',
   meta: {
     icon: 'md-book',
-    title: '订餐系统'
+    title: '预定管理'
   },
   component: Main,
   children: [{
@@ -14,6 +14,6 @@ export default {
       icon: 'md-bookmarks',
       title: '订餐'
     },
-    component: () => import('@/view/dinner/list/list.vue')
+    component: () => import('@/view/reserve/list')
   }]
 }

@@ -33,7 +33,7 @@ export default [{
     title: 'Login - 登录',
     hideInMenu: true
   },
-  component: () => import('@/view/login/login.vue')
+  component: () => import('@/view/common/login')
 },
 {
   path: '/',
@@ -53,7 +53,7 @@ export default [{
       notCache: true,
       icon: 'md-home'
     },
-    component: () => import('@/view/single-page/home')
+    component: () => import('@/view/common/home')
   }]
 },
 ...routerList,
@@ -63,7 +63,7 @@ export default [{
   meta: {
     hideInMenu: true
   },
-  component: () => import('@/view/error-page/401.vue')
+  component: () => import('@/view/common/errorPage/401.vue')
 },
 {
   path: '/500',
@@ -71,7 +71,7 @@ export default [{
   meta: {
     hideInMenu: true
   },
-  component: () => import('@/view/error-page/500.vue')
+  component: () => import('@/view/common/errorPage/500.vue')
 },
 {
   path: '*',
@@ -79,6 +79,6 @@ export default [{
   meta: {
     hideInMenu: true
   },
-  component: () => import('@/view/error-page/404.vue')
+  component: () => import('@/view/common/errorPage/404.vue')
 }
 ]

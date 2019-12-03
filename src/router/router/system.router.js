@@ -15,7 +15,7 @@ export default {
       icon: 'md-contacts',
       title: '人员维护'
     },
-    component: () => import('@/view/system/person/person.vue')
+    component: () => import('@/view/system/person')
   },
   {
     path: 'food',
@@ -24,7 +24,7 @@ export default {
       icon: 'md-beer',
       title: '菜品维护'
     },
-    component: () => import('@/view/system/food/food.vue')
+    component: () => import('@/view/system/food')
   }
   ]
 }
