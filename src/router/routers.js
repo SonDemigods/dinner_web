@@ -16,6 +16,16 @@ import Main from '@/components/main'
  * }
  */
 
+//  动态引入路由文件
+const routerList = []
+
+function importAll (r) {
+  r.keys().map(value => {
+    routerList.push(r(value).default)
+  })
+}
+importAll(require.context('./router', true, /\.router\.js/))
+
 export default [{
   path: '/login',
   name: 'login',
@@ -46,53 +56,7 @@ export default [{
     component: () => import('@/view/single-page/home')
   }]
 },
-{
-  path: '/dinner',
-  name: 'dinner',
-  meta: {
-    icon: 'md-book',
-    title: '订餐系统'
-  },
-  component: Main,
-  children: [{
-    path: 'list',
-    name: 'list',
-    meta: {
-      icon: 'md-bookmarks',
-      title: '订餐'
-    },
-    component: () => import('@/view/dinner/list/list.vue')
-  }]
-},
-{
-  path: '/system',
-  name: 'system',
-  meta: {
-    icon: 'md-settings',
-    title: '系统维护',
-    access: ['isAdmin']
-  },
-  component: Main,
-  children: [{
-    path: 'person',
-    name: 'person',
-    meta: {
-      icon: 'md-contacts',
-      title: '人员维护'
-    },
-    component: () => import('@/view/system/person/person.vue')
-  },
-  {
-    path: 'food',
-    name: 'food',
-    meta: {
-      icon: 'md-beer',
-      title: '菜品维护'
-    },
-    component: () => import('@/view/system/food/food.vue')
-  }
-  ]
-},
+...routerList,
 {
   path: '/401',
   name: 'error_401',
