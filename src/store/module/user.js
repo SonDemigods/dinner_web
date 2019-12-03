@@ -1,6 +1,6 @@
 import {
   Message
-} from 'iview'
+} from 'view-design'
 import {
   login
   // logout,
