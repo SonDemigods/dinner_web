@@ -1,11 +1,15 @@
+// 提示信息组件
 import {
   Message
 } from 'view-design'
+
+// 接口
 import {
-  login
-  // logout,
-  // getUserInfo
-} from '@/api/user'
+  login,
+  logout
+} from '@/api/common'
+
+// token方法
 import {
   setToken,
   getToken
@@ -13,14 +17,16 @@ import {
 
 export default {
   state: {
+    // 用户名
     userName: localStorage.getItem('userName') ? localStorage.getItem('userName') : '',
-    userId: localStorage.getItem('userid') ? localStorage.getItem('userid') : '',
-    avatorImgPath: localStorage.getItem('userpic') ? localStorage.getItem('userpic') : '',
+    // 用户ID
+    userId: localStorage.getItem('userId') ? localStorage.getItem('userId') : '',
+    // 用户头像
+    avatorImgPath: localStorage.getItem('userPic') ? localStorage.getItem('userPic') : '',
+    // token
     token: getToken(),
-    access: localStorage.getItem('access') ? localStorage.getItem('access').split(',') : [],
-    unitId: localStorage.getItem('unitid') ? localStorage.getItem('unitid') : '',
-    unitName: localStorage.getItem('unitName') ? localStorage.getItem('unitName') : '',
-    hasGetInfo: localStorage.getItem('hasGetInfo') === 'true'
+    // 权限
+    access: localStorage.getItem('access') ? localStorage.getItem('access').split(',') : []
   },
   mutations: {
     setAvator (state, avatorPath) {
@@ -42,10 +48,6 @@ export default {
     setToken (state, token) {
       state.token = token
       setToken(token)
-    },
-    setHasGetInfo (state, status) {
-      localStorage.setItem('hasGetInfo', status)
-      state.hasGetInfo = status
     }
   },
   actions: {
@@ -72,7 +74,6 @@ export default {
             commit('setUserId', data.data.id)
             commit('setToken', data.data.isAdmin)
             commit('setAccess', data.data.isAdmin === 1 ? ['isAdmin'] : [])
-            commit('setHasGetInfo', true)
           } else {
             Message.error(data.msg)
           }
@@ -88,43 +89,19 @@ export default {
       commit
     }) {
       return new Promise((resolve, reject) => {
-        // logout(state.token).then(() => {
-        //   commit('setToken', '')
-        //   commit('setAccess', [])
-        //   resolve()
-        // }).catch(err => {
-        //   reject(err)
-        // })
-        // 如果你的退出登录无需请求接口，则可以直接使用下面三行代码而无需使用logout调用接口
-        commit('setToken', '')
-        commit('setAccess', [])
-        localStorage.clear()
-        resolve()
+        logout(state.token).then(() => {
+          commit('setToken', '')
+          commit('setAccess', [])
+          resolve()
+        }).catch(err => {
+          reject(err)
+        })
+        // 如果你的退出登录无需请求接口，则可以直接使用下面四行代码而无需使用logout调用接口
+        // commit('setToken', '')
+        // commit('setAccess', [])
+        // localStorage.clear()
+        // resolve()
       })
-    },
-    // 获取用户相关信息
-    getUserInfo ({
-      state,
-      commit
-    }) {
-      return localStorage.getItem('access') ? localStorage.getItem('access').split(',') : []
-      // return new Promise((resolve, reject) => {
-      // try {
-      //   getUserInfo(state.token).then(res => {
-      //     const data = res.data
-      //     commit('setAvator', data.avator)
-      //     commit('setUserName', data.name)
-      //     commit('setUserId', data.user_id)
-      //     commit('setAccess', data.access)
-      //     commit('setHasGetInfo', true)
-      //     resolve(data)
-      //   }).catch(err => {
-      //     reject(err)
-      //   })
-      // } catch (error) {
-      //   reject(error)
-      // }
-      // })
     }
   }
 }
