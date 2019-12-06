@@ -133,6 +133,11 @@ import baseTable from '_c/tables'
 import columnsList from './columns'
 import workForm from '../form/form'
 import { invoiceType } from '@/libs/selectList'
+// 预定接口
+import { getWorkPage, getWorkList, getWorkListByPersonId, deleteWork, leaveWork } from '@/api/reserve/reserve'
+// 人员接口
+import { getPersonList } from '@/api/system/person'
+
 export default {
   name: 'workList',
   components: {
@@ -206,7 +211,7 @@ export default {
       this.current = 1
       this.searchDate = ''
       this.reloadTable()
-      // this.getWorkListByNameId(userId)
+      // this.getWorkListByPersonId(userId)
     },
     // 导出excel
     showExportModal () {
@@ -216,7 +221,7 @@ export default {
       this.loading = false
       this.$refs['exportFormData'].validate((valid) => {
         if (valid) {
-          this.$api('work/getWorkList', this.exportForm).then((res) => {
+          getWorkList(this.exportForm).then((res) => {
             if (res.length) {
               let data = {}
               res.map(item => {
@@ -252,19 +257,19 @@ export default {
     cancelExport () {
       this.exportModal = false
     },
-    getWorkListByNameId (nameId) {
-      this.$api('work/getWorkListByNameId', { nameId: nameId }).then(res => {
+    getWorkListByPersonId (pid) {
+      getWorkListByPersonId({ pid }).then(res => {
         this.tableData = res
       })
     },
     personOnChangeHandle (item) {
-      this.getWorkListByNameId(item)
+      this.getWorkListByPersonId(item)
     },
     init () {
       this.getPersonList()
     },
     getPersonList () {
-      this.$api('person/getPersonList').then(res => {
+      getPersonList().then(res => {
         this.personList = res
       })
     },
@@ -283,7 +288,7 @@ export default {
         title: '确认',
         content: '是否删除该数据？',
         onOk: () => {
-          this.$api('work/deleteWork', { id: this.tableData[index].id }).then(res => {
+          deleteWork({ id: this.tableData[index].id }).then(res => {
             this.$Message.success('删除成功！')
             this.reloadTable()
           })
@@ -301,7 +306,7 @@ export default {
       this.loading = false
       this.$refs['leaveFormData'].validate((valid) => {
         if (valid) {
-          this.$api('work/leaveWork', this.leaveForm).then(res => {
+          leaveWork(this.leaveForm).then(res => {
             this.$Message.success('修改成功!')
             this.leaveModal = false
             this.reloadTable()
@@ -375,7 +380,7 @@ export default {
         date: this.searchDate,
         pid: this.pid
       }
-      this.$api('work/getWorkPage', data).then(res => {
+      getWorkPage(data).then(res => {
         this.tableData = res.row
         this.total = res.total
       })

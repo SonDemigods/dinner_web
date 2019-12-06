@@ -54,13 +54,14 @@ class HttpRequest {
     instance.interceptors.response.use(res => {
       this.destroy(url)
       const {
-        data,
-        status
+        data
+        // status
       } = res
-      return {
-        data,
-        status
-      }
+      // return {
+      //   data,
+      //   status
+      // }
+      return data
     }, error => {
       this.destroy(url)
       addErrorLog(error.response)

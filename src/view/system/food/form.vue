@@ -25,6 +25,9 @@
 </template>
 
 <script>
+// 菜品接口
+import { getFood, creatFood, modifyFood } from '@/api/system/food'
+
 export default {
   name: 'foodForm',
   components: {},
@@ -71,7 +74,7 @@ export default {
   methods: {
     formInit () {
       if (this.formId !== 0) {
-        this.$api('food/getFood', { id: this.formId }).then(res => {
+        getFood({ id: this.formId }).then(res => {
           this.formData = res
         })
       } else {
@@ -87,12 +90,12 @@ export default {
       this.$refs['foodFormData'].validate((valid) => {
         if (valid) {
           if (this.formId === 0) {
-            this.$api('food/creatFood', this.formData).then(res => {
+            creatFood(this.formData).then(res => {
               this.$Message.success('新增成功!')
               this.$emit('on-ok', false)
             })
           } else {
-            this.$api('food/modifyFood', this.formData).then(res => {
+            modifyFood(this.formData).then(res => {
               this.$Message.success('修改成功!')
               this.$emit('on-ok', false)
             })

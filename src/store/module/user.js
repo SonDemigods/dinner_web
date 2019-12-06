@@ -5,8 +5,8 @@ import {
 
 // 接口
 import {
-  login,
-  logout
+  login
+  // logout
 } from '@/api/common'
 
 // token方法
@@ -64,18 +64,17 @@ export default {
           userName,
           password
         }).then(res => {
-          const data = res.data
-          if (data.success) {
-            Message.success(data.msg)
+          if (res.success) {
+            Message.success(res.msg || '登录失败！')
             localStorage.clear()
-            commit('setToken', data.data.isAdmin)
+            commit('setToken', res.data.isAdmin)
             commit('setAvator', 'https://avatars2.githubusercontent.com/u/23623726?s=460&v=4')
-            commit('setUserName', data.data.name)
-            commit('setUserId', data.data.id)
-            commit('setToken', data.data.isAdmin)
-            commit('setAccess', data.data.isAdmin === 1 ? ['isAdmin'] : [])
+            commit('setUserName', res.data.name)
+            commit('setUserId', res.data.id)
+            commit('setToken', res.data.isAdmin)
+            commit('setAccess', res.data.isAdmin === 1 ? ['isAdmin'] : [])
           } else {
-            Message.error(data.msg)
+            Message.error(res.msg || '登录失败！')
           }
           resolve()
         }).catch(err => {
@@ -89,18 +88,18 @@ export default {
       commit
     }) {
       return new Promise((resolve, reject) => {
-        logout(state.token).then(() => {
-          commit('setToken', '')
-          commit('setAccess', [])
-          resolve()
-        }).catch(err => {
-          reject(err)
-        })
+        // logout(state.token).then(() => {
+        //   commit('setToken', '')
+        //   commit('setAccess', [])
+        //   resolve()
+        // }).catch(err => {
+        //   reject(err)
+        // })
         // 如果你的退出登录无需请求接口，则可以直接使用下面四行代码而无需使用logout调用接口
-        // commit('setToken', '')
-        // commit('setAccess', [])
-        // localStorage.clear()
-        // resolve()
+        commit('setToken', '')
+        commit('setAccess', [])
+        localStorage.clear()
+        resolve()
       })
     }
   }

@@ -23,6 +23,8 @@
 </template>
 
 <script>
+// 人员接口
+import { getPerson, creatPerson, modifyPerson } from '@/api/system/person'
 export default {
   name: 'personForm',
   components: {},
@@ -69,7 +71,7 @@ export default {
   methods: {
     formInit () {
       if (this.formId !== 0) {
-        this.$api('person/getPerson', { id: this.formId }).then(res => {
+        getPerson({ id: this.formId }).then(res => {
           this.formData = res
         })
       } else {
@@ -85,12 +87,12 @@ export default {
       this.$refs['personFormData'].validate((valid) => {
         if (valid) {
           if (this.formId === 0) {
-            this.$api('person/creatPerson', this.formData).then(res => {
+            creatPerson(this.formData).then(res => {
               this.$Message.success('新增成功!')
               this.$emit('on-ok', false)
             })
           } else {
-            this.$api('person/modifyPerson', this.formData).then(res => {
+            modifyPerson(this.formData).then(res => {
               this.$Message.success('修改成功!')
               this.$emit('on-ok', false)
             })

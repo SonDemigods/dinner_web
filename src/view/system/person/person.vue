@@ -46,6 +46,9 @@
 import baseTable from '_c/tables'
 import columnsList from './columns'
 import personForm from './form'
+// 人员接口
+import { getPersonPage, deletePerson } from '@/api/system/person'
+
 export default {
   name: 'personList',
   components: {
@@ -84,7 +87,7 @@ export default {
         title: '确认',
         content: '是否删除该数据？',
         onOk: () => {
-          this.$api('person/deletePerson', { id: this.tableData[index].id }).then(res => {
+          deletePerson({ id: this.tableData[index].id }).then(res => {
             this.$Message.success('删除成功！')
             this.reloadTable()
           })
@@ -147,7 +150,7 @@ export default {
         pageSize: this.pageSize,
         current: this.current
       }
-      this.$api('person/getPersonPage', data).then(res => {
+      getPersonPage(data).then(res => {
         this.tableData = res.row
         this.total = res.total
       })

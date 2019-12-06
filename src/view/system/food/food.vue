@@ -46,6 +46,8 @@
 import baseTable from '_c/tables'
 import columnsList from './columns'
 import foodForm from './form'
+// 菜品接口
+import { getFoodPage, deleteFood } from '@/api/system/food'
 export default {
   name: 'foodList',
   components: {
@@ -84,7 +86,7 @@ export default {
         title: '确认',
         content: '是否删除该数据？',
         onOk: () => {
-          this.$api('food/deleteFood', { id: this.tableData[index].id }).then(res => {
+          deleteFood({ id: this.tableData[index].id }).then(res => {
             this.$Message.success('删除成功！')
             this.reloadTable()
           })
@@ -147,7 +149,7 @@ export default {
         pageSize: this.pageSize,
         current: this.current
       }
-      this.$api('food/getFoodPage', data).then(res => {
+      getFoodPage(data).then(res => {
         this.tableData = res.row
         this.total = res.total
       })

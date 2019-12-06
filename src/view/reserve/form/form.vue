@@ -73,6 +73,13 @@
 </template>
 <script>
 import { workType } from '@/libs/selectList'
+// 预定接口
+import { getWork, creatWork, modifyWork } from '@/api/reserve/reserve'
+// 菜品接口
+import { getFoodList } from '@/api/system/food'
+// 人员接口
+import { getPersonList } from '@/api/system/person'
+
 export default {
   name: 'workForm',
   components: {},
@@ -143,14 +150,14 @@ export default {
     init () {
     },
     formInit () {
-      this.$api('food/getFoodList').then(res => {
+      getFoodList().then(res => {
         this.foodList = res
       })
-      this.$api('person/getPersonList').then(res => {
+      getPersonList().then(res => {
         this.personList = res
       })
       if (this.formId !== 0) {
-        this.$api('work/getWork', { id: this.formId }).then(res => {
+        getWork({ id: this.formId }).then(res => {
           this.formData = res
         })
       } else {
@@ -184,12 +191,12 @@ export default {
       this.$refs['workFormData'].validate((valid) => {
         if (valid) {
           if (this.formId === 0) {
-            this.$api('work/creatWork', this.formData).then(res => {
+            creatWork(this.formData).then(res => {
               this.$Message.success('新增成功!')
               this.$emit('on-ok', false)
             })
           } else {
-            this.$api('work/modifyWork', this.formData).then(res => {
+            modifyWork(this.formData).then(res => {
               this.$Message.success('修改成功!')
               this.$emit('on-ok', false)
             })
